@@ -1,11 +1,10 @@
 /* alarm - delay until a specific time. */
 #include <time.h>
-//#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 
-#define DEBUG 1
+#define DEBUG 0
 
 #define dbgprint(fmt, ...) \
             do { if (DEBUG) fprintf(stderr, fmt, __VA_ARGS__); } while (0)
@@ -46,6 +45,8 @@ struct timespec get_remaining_time(struct timespec alarm_time, struct timespec c
 }
 
 void sleep_for_a_time(struct timespec previous_time, struct timespec current_time, struct timespec rem){
+	//TODO: figure out why this function is optimized out unless there is a sleep function.
+	printf("sleeping...\n");
 	//Test if the system was suspended while this process was asleep.
 	if(current_time.tv_sec - previous_time.tv_sec > sleep_period + 1){
 		dbgprint("System was detected asleep, resetting sleep timer%s\n", ".");
@@ -74,7 +75,7 @@ void sleep_for_a_time(struct timespec previous_time, struct timespec current_tim
 
 	dbgprint("Sleeping for time %lf secs.\n", sleep_period);
 	//sleep(sleep_period);
-	volatile int res;
+	int res;
 	struct timespec ts;
 	ts.tv_sec = (long) sleep_period;
 	do{
