@@ -6,8 +6,8 @@
 
 #define DEBUG 0
 
-#define dbgprint(fmt, ...) \
-            do { if (DEBUG) fprintf(stderr, fmt, __VA_ARGS__); } while (0)
+#define dbgprint(...) \
+            do { if (DEBUG) fprintf(stderr, __VA_ARGS__); } while (0)
 
 //The sleep period acts like a sliding window.
 #define MAX_SLEEP_PERIOD		60
@@ -49,7 +49,7 @@ void sleep_for_a_time(struct timespec previous_time, struct timespec current_tim
 	printf("sleeping...\n");
 	//Test if the system was suspended while this process was asleep.
 	if(current_time.tv_sec - previous_time.tv_sec > sleep_period + 1){
-		dbgprint("System was detected asleep, resetting sleep timer%s\n", ".");
+		dbgprint("System was detected asleep, resetting sleep timer.\n");
 		sleep_period = SLEEP_INIT;
 	}
 	//Calculate sleep_period.
@@ -68,7 +68,7 @@ void sleep_for_a_time(struct timespec previous_time, struct timespec current_tim
 		}
 		//Sub-second time to wait, just spin.
 		if(rem.tv_sec == 0){
-			dbgprint("sleep_period is close to rem, setting to %s.\n", "0");
+			dbgprint("sleep_period is close to rem, setting to 0.\n");
 			sleep_period = 0;
 		}
 	}
@@ -89,15 +89,12 @@ double parse_to_seconds(const char* time_suffixed){
 	double output = strtod(time_suffixed, &endptr);
 
 	if(output == 0 && time_suffixed == endptr){
-		dbgprint("AAAAA%s\n", "AAAA");
 		return 0;
 	}
 	if(errno == ERANGE){
-		dbgprint("AAAAA%s\n", "AAAA");
 		return 0;
 	}
 	if(endptr == NULL){
-		dbgprint("AAAAA%s\n", "AAAA");
 		return output;
 	}
 
@@ -114,7 +111,6 @@ double parse_to_seconds(const char* time_suffixed){
 			output *= 60 * 60 * 24;
 			break;
 		default:
-			dbgprint("AAAAA%s\n", "AAAA");
 			return 0;
 	}
 
@@ -123,7 +119,7 @@ double parse_to_seconds(const char* time_suffixed){
 
 int main(int argc, char* argv[]){
 	if(argc < 2){
-		dbgprint("not enough arguments%s\n", ".");
+		dbgprint("not enough arguments.\n");
 		return -1;
 	}
 	double time_to_wait = 0;
