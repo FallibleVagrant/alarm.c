@@ -45,11 +45,11 @@ struct timespec get_remaining_time(struct timespec alarm_time, struct timespec c
 }
 
 void sleep_for_a_time(struct timespec previous_time, struct timespec current_time, struct timespec rem){
-	//TODO: figure out why this function is optimized out unless there is a sleep function.
-	printf("sleeping...\n");
+	//TODO: figure out why this function is optimized out unless there is a print function.
+	//printf("sleeping...\n");
 	//Test if the system was suspended while this process was asleep.
 	if(current_time.tv_sec - previous_time.tv_sec > sleep_period + 1){
-		dbgprint("System was detected asleep, resetting sleep timer.\n");
+		dbgprint("System was detected asleep; resetting sleep timer.\n");
 		sleep_period = SLEEP_INIT;
 	}
 	//Calculate sleep_period.
